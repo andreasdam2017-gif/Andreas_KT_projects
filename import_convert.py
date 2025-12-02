@@ -52,13 +52,18 @@ for i in range(len(inventory_list)):
         emptylist = [inventory_list[i]]
         inventory_categories.update({category : emptylist})
 
-#We open the inventory.json file and dump the dictionary of categories from above into the json file.
+#We open both json files and dump the dictionary of categories from above into the json file.
+#And also dump the sales dictionary 
+
 with open("inventory.json", mode="w") as json_dict:
     json.dump(inventory_categories, json_dict)
-with open("sales.json", mode="w") as json_dict:
-     json.dump(sales_list, json_dict)
 
-#We make a pretty print of the categories.     
+
+
+with open("sales.json", mode="w") as json_dict:
+    json.dump(sales_list, json_dict)
+
+#We make a pretty print of the categories. Purely for aesthetics and easier to read   
 with open("inventory.json",'r') as inventory:
     parsed = json.load(inventory)
     print(json.dumps(parsed, indent = 4))
