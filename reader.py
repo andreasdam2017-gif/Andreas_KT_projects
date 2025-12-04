@@ -22,7 +22,10 @@ def reader_userinput(directory):
     return loaded_file
 
 def reader_system(file_name):
-    with open(file_name, 'r') as file:
-        loaded_file = json.load(file)
-    return loaded_file
-
+    if file_name.endswith('.json'):
+        with open(file_name, 'r') as file:
+            loaded_file = json.load(file)
+        return loaded_file
+    elif file_name.endswith('.txt'):
+        with open(file_name, 'r') as file:
+            return file
