@@ -61,7 +61,7 @@ with open("inventory.json", mode="w") as json_dict:
 
 
 with open("sales.json", mode="w") as json_dict:
-    json.dump(sales_list, json_dict)
+    json.dump(sales_dict, json_dict)
 
 #We make a pretty print of the categories. Purely for aesthetics and easier to read   
 with open("inventory.json",'r') as inventory:
