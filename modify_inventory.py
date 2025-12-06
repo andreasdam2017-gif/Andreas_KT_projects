@@ -51,19 +51,39 @@ def delete_item_inventory():
 
 def update_inventory():
     #The function updates an item and displays it for the user
+    #Arguments : none
+    #Returns : none
+
+    #initialize variables
     inventory_dict = reader.reader_system('inventory.json')
     update_input = input('Input the item id you want to update : ')
-    print('_'*100)
-    for index, (keys, category) in enumerate(inventory_dict.items()):            #Pointer pointing to the category list
+    print('_'*100, '\n')
+    item_inventory = 0
+    #Searching for the item id
+    for index, (keys, category) in enumerate(inventory_dict.items()):               #Pointer pointing to the category list
         for item in category:
-            if item['item_id'] == update_input:
-                for i, key in enumerate(item.keys()):
-                    print(f'{i+1} : {key:<17} : {item[key]}')
+            if item['item_id'] == update_input:                                     #If the item exists then we update it
+                index_keys = list(enumerate(item.keys()))
+                item_inventory = 1
+                #Prints the options menue for the item to be updated
+                for i, key in index_keys:
+                    if key != 'item_id':
+                        print(f'{i} : {key:<17} : {item[key]}')
                 print('0 : BACK\n')
-                userinput = input('Input the index you want to update : ')
-                while userinput != 0:
-                    pass
 
+                options_input = input('Input the index you want to update : ')
+
+                #Loop that allows you to update multiple items and back out
+                while options_input != '0':
+                    custom_input= input('What do you want to change the value to? : ')
+                    item[index_keys[int(options_input)][1]] = custom_input
+
+                    options_input = input('Input the index you want to update : ')
+                #print(item)
+                break
+    
+    if item_inventory == 0:
+        print('Item does not exist, consider adding it to the inventory instead.')
 
 
 update_inventory()
