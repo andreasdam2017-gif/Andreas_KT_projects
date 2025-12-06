@@ -8,9 +8,7 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath) 
 os.chdir(dname)
 
-with open("sales.json", "r") as f:
-    sales_list = json.load(f)
-inventory_categories = reader.reader_system('inventory.json')
+
 #print it out in a readable way
 
 def display(display_file):
