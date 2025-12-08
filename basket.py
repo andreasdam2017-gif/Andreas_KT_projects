@@ -16,7 +16,7 @@ def process_sale():
 
     # Determine the next sale_id by examining existing sales
     # Normalize sales_data: support either a dict wrapper or a plain list
-    if isinstance(sales_data, dict):
+    if isinstance(sales_data, dict): #isinstance checks if its a dict or something else
         sales_list = sales_data.get("sales", [])
     else:
         sales_list = sales_data
@@ -29,19 +29,29 @@ def process_sale():
     while True:
         try:
             ask = int(input("Would you like to purchase something? Press 1 to buy and anything else to cancel: "))
-        except ValueError:
+
+
+                    
+        except ValueError:#Incase user writes a non interger
             print("Invalid input — cancelling.")
             break
 
         if ask != 1:
             print("Purchase cancelled.")
             break
-        # Compute next sale_id for this new sale (fresh id per sale)
-        if sales_list:
-            max_id_str = max(sales_list, key=lambda s: int(s["sale_id"]))["sale_id"]
-            next_key = str(int(max_id_str) + 1)
-        else:
-            next_key = "1"
+        verify = int(input('Are you a new customer or do you wish to buy more as the same customer? Press 1 if new or Press 2 to continue shopping'))
+        if verify == "1":
+            
+                     # Compute next sale_id for this new sale (fresh id per sale)
+                    max_id_str = max(sales_list, key=lambda s: int(s["sale_id"]))["sale_id"]
+                    next_key = str(int(max_id_str) + 1)
+             
+        if verify == "2":
+                #Keeps same sale_id but allows you to buy more
+                max_id_str = max(sales_list, key=lambda s: int(s["sale_id"]))["sale_id"]
+                next_key = str(int(max_id_str))
+       
+
 
         # Determine the date for this sale: increment last sale's date by 1 day if possible,
         # otherwise use today's date. Expected stored date format is YYYY-MM-DD.
@@ -67,7 +77,7 @@ def process_sale():
                 print(f"  ID: {item['item_id']} - Name: {item['item_name']} - Qty: {item['quantity_in_stock']}")
 
             user_item_id = input("What Item ID do you want? ").strip()
-            # Create mapping item_id -> item for fast lookup
+            # Create mapping item_id
             item_dict = {item["item_id"]: item for item in items}
             result = item_dict.get(user_item_id)
 
@@ -110,7 +120,7 @@ def process_sale():
                     writer.writer_system(sales_list, 'sales.json')
 
                     print("Added sale:", outersale[next_key])
-                    # show total number of sale lines (not unique sale ids)
+                    # show total number of sale lines 
                     print("Total number of sale lines now:", len(sales_list))
                     print("\nEntire sales dictionary:")
                     print(json.dumps(outersale, indent=2))
@@ -121,5 +131,5 @@ def process_sale():
         else:
             print(f"Category '{user_cat}' not found")
 
-# Execute the interactive sale process
+
 process_sale()
