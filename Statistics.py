@@ -19,50 +19,47 @@ def statistics():
     else:
         # empty or unexpected format, makes it into an empty DataFrame
         sales_stats = pd.DataFrame()
-
   
     df = sales_stats
-    
-
     if df.empty:
         print("No sales data available to compute statistics.")
         return
 
-    # Ensure numeric types for calculations
+     # Convert columns (that hold numbers as strings) to real numeric types so you can do math on them  
     df['quantity_sold'] = pd.to_numeric(df.get('quantity_sold', pd.Series(dtype='int')))  #numerics makes '20' into 20
     df['line_total'] = pd.to_numeric(df.get('line_total', pd.Series(dtype='float')))
     df['sale_id'] = pd.to_numeric(df.get('sale_id', pd.Series(dtype='int')))
+    
     total_sales = df['line_total'].sum()
    
     #drop duplicates to count unique sales entries
     unique_sales_count = df['sale_id'].nunique()
     sales_count = df['sale_id']
     
-    #Calculate average revenue per sale entry with .mean() total revenue / number of sale entries
-    average_revenue_per_sale = df['line_total'].mean() if not df['line_total'].empty else 0 
+  # average revenue per sale entry (i.e. average of line_total per row)
+    average_revenue_per_sale = df['line_total'].mean() if not df['line_total'].empty else 0 #looks if line_total is empty
+    # mean() computes the average of the line_total column
     
     best_selling_by_quantity = df.groupby('item_id')['quantity_sold'].sum()
+    print('Sales Statistics:')    
+    print('-' * 40)
+    print(f'Average revenue per sale entry: {average_revenue_per_sale}')
+    print('-' * 40)
+    print(f'Number of unique sales entries: {unique_sales_count}') 
     
-    best_selling_by_quantity = best_selling_by_quantity.T.sort_values(ascending=False)
-    
-    #print("Best selling by quantity (series):")
-    #print(best_selling_by_quantity)
-    print('-'* 40)
-    print(f"Average revenue per sale entry: {average_revenue_per_sale}")
-    print('-'* 40)
-    print(f"Number of unique sales entries: {unique_sales_count}") 
+    print('-' * 40)
+    print(f'Total Revenue (sum of line_total): {total_sales}')
+    print('-' * 40)
 
     
-    print('-'* 40)
-    print(f"Total Revenue (sum of line_total): {total_sales}")
-    print('-'* 40)
+        # idxmax(): finds the index (item_id) of the max value in the series or the item with highest total quantity sold
+    most_popular_product_quantity = best_selling_by_quantity.idxmax()
+    print('Most popular product by quantity: Item ID', most_popular_product_quantity)
 
-    if not best_selling_by_quantity.empty:
-        most_popular_product_quantity = best_selling_by_quantity.idxmax()
-        r=print("Most popular product by quantity: Item ID", most_popular_product_quantity)
-    else:
-        k=print("No best-selling product (no data)")
-    print('-'* 40)    
+    print('-' * 40)   
+    r = (input('If you wish to see a record of all sales, press 1'))
+    if r == '1':
+        (print(df.to_string())) #.to_string() is to prevent truncation
         
         
         

@@ -5,7 +5,7 @@
       "item_name": "Milk 1L",
       "category": "Dairy",
       "price": "1.25",
-      "quantity_in_stock": "15"
+      "quantity_in_stock": "14"
     },
     {
       "item_id": "103",
@@ -51,7 +51,7 @@
       "item_name": "Apples 1kg",
       "category": "Fruit",
       "price": "2.80",
-      "quantity_in_stock": "20"
+      "quantity_in_stock": "25"
     },
     {
       "item_id": "105",
