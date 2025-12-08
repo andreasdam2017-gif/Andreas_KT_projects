@@ -3,7 +3,7 @@ import reader
 import writer
 
 def generate_backup(inventory_dict):
-    #The function sorts all the items in the inventory and writes it to a backup.txt file
+    #The function sorts all the items in the inventory and writes it to a backup.txt file (Don't add any ":" in the fields)
     #Arguments : a dictionary of lists containing dictionaries
     #Returns : none
     
@@ -31,6 +31,7 @@ def generate_backup(inventory_dict):
             backup_file.writelines(f': {value:<{len(key)+10}}')
         backup_file.writelines(f'\n')
     backup_file.close()
+
 
 if __name__ == '__main__':
     inventorydict = reader.reader_system('inventory.json')
