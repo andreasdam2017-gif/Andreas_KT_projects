@@ -46,7 +46,8 @@ def swap_values_backup():
         second_item = re.search(pattern, backup[i2])
         backup[i1] = re.sub(first_item.group(coloumns[coloumn_swap]), second_item.group(coloumns[coloumn_swap]), backup[i1])
         backup[i2] = re.sub(second_item.group(coloumns[coloumn_swap]), first_item.group(coloumns[coloumn_swap]), backup[i2])
-        writer.writer_system()
+        writer.writer_system(backup, 'inventory_backup.txt')
+        #print(backup)
 
     
 
