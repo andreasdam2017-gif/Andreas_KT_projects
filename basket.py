@@ -83,7 +83,7 @@ def process_sale():
             items = inventory_categories[user_cat]
             print(f'\nItems in {user_cat}:')
             for item in items:
-                print(f'  ID: {item['item_id']} - Name: {item['item_name']} - Qty: {item['quantity_in_stock']}')
+                print(f'  ID: {item["item_id"]} - Name: {item["item_name"]} - Qty: {item["quantity_in_stock"]}')
 
             user_item_id = input('What Item ID do you want? ').strip()
             # Create mapping item_id
