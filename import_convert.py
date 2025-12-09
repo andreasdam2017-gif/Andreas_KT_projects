@@ -8,13 +8,13 @@ dname = os.path.dirname(abspath)
 os.chdir(dname)
 #We open the two.cvs in a try and execpt, where if error we get a empty json file.
 try:
-    with open("inventory.csv", newline="") as inventory: #newline if empty
+    with open('inventory.csv', newline='') as inventory: #newline if empty
         reader = csv.reader(inventory)
         list_dict = list(reader)
 except:
     list_dict = []
 try:   
-    with open("sales.csv", newline="") as sales: #newline if empty
+    with open('sales.csv', newline='') as sales: #newline if empty
         reader = csv.reader(sales)
         list_dict2 = list(reader)
 except:
@@ -55,19 +55,19 @@ for i in range(len(inventory_list)):
 #We open both json files and dump the dictionary of categories from above into the json file.
 #And also dump the sales dictionary 
 
-with open("inventory.json", mode="w") as json_dict:
+with open('inventory.json', mode='w') as json_dict:
     json.dump(inventory_categories, json_dict)
 
 
 
-with open("sales.json", mode="w") as json_dict:
+with open('sales.json', mode='w') as json_dict:
     json.dump(sales_dict, json_dict)
 
 #We make a pretty print of the categories. Purely for aesthetics and easier to read   
-with open("inventory.json",'r') as inventory:
+with open('inventory.json','r') as inventory:
     parsed = json.load(inventory)
     print(json.dumps(parsed, indent = 4))
-with open("sales.json",'r') as sales:
+with open('sales.json','r') as sales:
     parsed = json.load(sales)    
     print(json.dumps(parsed, indent = 4))
 
