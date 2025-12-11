@@ -23,7 +23,8 @@ def display(display_file):
             print(f'  Item {index}:')                #find its index in the list
             for key, value in item.items():          #We print the key and values in the index
                 print(f'    {key} = {value}')
-                
+
+        
 display('inventory.json')#Change name if you wish to see inventory.json or sales.json file
 
     

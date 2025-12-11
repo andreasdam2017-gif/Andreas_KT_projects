@@ -85,5 +85,5 @@ def update_inventory():
     if item_inventory == 0:
         print('Item does not exist, consider adding it to the inventory instead.')
 
-
-update_inventory()
+if __name__ == '__main__':
+    update_inventory()
