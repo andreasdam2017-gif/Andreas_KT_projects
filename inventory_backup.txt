@@ -25,3 +25,4 @@
 : 123              : Butter 250g        : Dairy             : 2.60           : 14                         
 : 124              : Shampoo 500ml      : Hygiene           : 4.20           : 11                         
 : 125              : Hand Soap 300ml    : Hygiene           : 2.10           : 17                         
+: 150              : Ostahaps           : Dairy             : 1.00           : 19                         

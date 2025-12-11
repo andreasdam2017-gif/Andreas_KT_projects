@@ -3,7 +3,8 @@ import reader
 from Show_sales_inventory import display
 import modify_inventory
 import backup
-import basket
+import basket_and_stats
+import import_convert
 
 
 # Sets the file directory to the working directory
@@ -28,16 +29,18 @@ options_register = {'1': display,
                     '3': modify_inventory.add_item_inventory,
                     '4': modify_inventory.delete_item_inventory,
                     '5': modify_inventory.update_inventory,
-                    '6':'Register a sale',
-                    '7':'Statistics on sales',
+                    '6': basket_and_stats.process_sale,
+                    '7': basket_and_stats.statistics,
                     '8': backup.generate_backup,
                     '9': backup.swap_values_backup,
-                    '10':'import test data from csv and save to json',
+                    '10': import_convert.import_and_convert_test_data,
                     '0': backup.generate_backup,}
 
 while True:
     for key, item in options_menue.items():
         print(f'{key:<2} : {item}')
-
-
+    user_option = input('Choose which option you want : ')
+    
+    if user_option in options_register:
+        options_register[user_option]()
     break

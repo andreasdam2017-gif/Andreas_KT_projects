@@ -3,12 +3,13 @@ import reader
 import writer
 import re
 
-def generate_backup(inventory_dict):
+def generate_backup():
     #The function sorts all the items in the inventory and writes it to a backup.txt file (Don't add any ":" in the fields)
     #Arguments : a dictionary of lists containing dictionaries
     #Returns : none
     
     #Puts all items into one list and sorts it with regard to item_id
+    inventory_dict = reader.reader_system('inventory.json')
     backup_li = []
     for keys, category in inventory_dict.items():               #Pointer pointing to the category list
         backup_li += category
@@ -93,5 +94,4 @@ def swap_values_backup():
 
 
 if __name__ == '__main__':
-    inventorydict = reader.reader_system('inventory.json')
-    generate_backup(inventorydict)
+    generate_backup()
