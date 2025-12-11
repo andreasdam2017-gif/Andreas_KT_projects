@@ -13,5 +13,4 @@ def writer_system(dict_of_lists, file_name):
     elif file_name.endswith('.txt'):
         with open(file_name, 'w') as file:
             for item in dict_of_lists:
-                print(item)
                 file.writelines(f'{item}')

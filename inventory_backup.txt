@@ -1,7 +1,7 @@
 : item_id          : item_name          : category          : price          : quantity_in_stock          
 ------------------------------------------------------------------------------------------------
-: 101              : Milk 1L            : Dairy             : 2.50           : 18                         
-: 102              : Bread Loaf         : Bakery            : 1.25           : 12                         
+: 101              : Milk 1L            : Dairy             : 1.25           : 18                         
+: 102              : Bread Loaf         : Bakery            : 2.50           : 12                         
 : 103              : Eggs 12-pack       : Dairy             : 3.10           : 30                         
 : 104              : Apples 1kg         : Fruit             : 2.80           : 25                         
 : 105              : Bananas 1kg        : Fruit             : 2.20           : 20                         
