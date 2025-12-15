@@ -22,7 +22,7 @@ def import_and_convert_test_data():
     except:
         list_dict2=[]        
     sales_list = []   
-    inventory_categories = {}   
+    inventory_dict = {}   
     inventory_list = []
     #We use a for loop that creates a list of empty dictionaries, adds the key value pairs to the empty dictionaries 
     for i in range(len(list_dict)-1):#-1 to remove the header in the cvs file
@@ -41,31 +41,24 @@ def import_and_convert_test_data():
                             'line_total' : list_dict2[i+1][4]})
     sales_dict = {'sales' : sales_list}
     print(sales_dict)
-    #We make a dictionary of categories, that sorts lists of dictionaries
-    #Into their respective categories
-    for i in range(len(inventory_list)):
-        category = inventory_list[i].get('category')
-        
-        if category in inventory_categories:
-            test = inventory_categories.get(category)
-            test.append(inventory_list[i])        
-            inventory_categories.update({category : test})
-        else:
-            emptylist = [inventory_list[i]]
-            inventory_categories.update({category : emptylist})
 
-    #We open both json files and dump the dictionary of categories from above into the json file.
+
+
+    # We sort the inventory with regards to item id to guarantee that it is in numerological order
+    inventory_list = sorted(inventory_list, key=lambda x: x['item_id'])
+    inventory_dict.update({'inventory' : inventory_list})
+
+    #We open both json files and dump the dictionary of the inventory from above into the json file.
     #And also dump the sales dictionary 
-
     with open('inventory.json', mode='w') as json_dict:
-        json.dump(inventory_categories, json_dict)
+        json.dump(inventory_dict, json_dict)
 
 
 
     with open('sales.json', mode='w') as json_dict:
         json.dump(sales_dict, json_dict)
 
-if __name__ == 'main':
+if __name__ == '__main__':
     import_and_convert_test_data()
     #We make a pretty print of the categories. Purely for aesthetics and easier to read   
     with open('inventory.json','r') as inventory:

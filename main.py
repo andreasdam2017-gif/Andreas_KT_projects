@@ -40,13 +40,23 @@ while True:
     if back == 0:
         for key, item in options_menue.items():
             print(f'{key:<2} : {item}')
-        user_option = input('Choose which option you want : ')
-    back = 1
+        back = 1
+
+    user_option = input('Choose which option you want : ')
     
     if user_option in options_register:
-        options_register[user_option]()
+        if user_option != '0':
+            options_register[user_option]()
+        else:
+            user_option = input('Do you want to save inventory to backup before closing?  [ y / n ]')
+            if user_option == 'y' or user_option =='Y':
+                options_register['0']()
+                break
+            else:
+                break
+
         back = 0
     else:
         print('Invalid input. Try again.')
     
-    break
+

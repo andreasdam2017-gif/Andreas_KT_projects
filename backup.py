@@ -71,27 +71,30 @@ def swap_values_backup():
         return
     
     # Inputs which header item you want to swap and compiles the regex that will catch the values to be swapped.
-    coloumn_swap = input('Which coloumn value do you want to swap? : ')
-    coloumns = {'item_id' : 1, 
-                'item_name' : 2, 
-                'category' : 3, 
-                'price' : 4, 
-                'quantity_in_stock' : 5
+    coloumns = {'1' : 'item_name', 
+                '2' : 'category', 
+                '3' : 'price', 
+                '4' : 'quantity_in_stock'
                 }
-    pattern = re.compile(r'^: (\d+)\s*: (.+?(?=:)): ([A-Z]*[a-z]+)\s*: (\d+\.\d*)\s*: (\d+)')
+    for i in range(1, len(coloumns)+1):
+        print(f'{i} : {coloumns[str(i)]}')
+    coloumn_swap = input('Which coloumn index do you want to swap? : ')
+    pattern = re.compile(r'^: \d+\s*: (.+?(?=:)): ([A-Z]*[a-z]+)\s*: (\d+\.\d*)\s*: (\d+)')
 
     # Finds the coloumn values  and splits them into 5 groups then swaps the specified values.
-    if coloumns[coloumn_swap]:
+    if coloumns.get(coloumn_swap):
         first_item = re.search(pattern, backup[i1])
         second_item = re.search(pattern, backup[i2])
-        backup[i1] = re.sub(first_item.group(coloumns[coloumn_swap]), second_item.group(coloumns[coloumn_swap]), backup[i1])
-        backup[i2] = re.sub(second_item.group(coloumns[coloumn_swap]), first_item.group(coloumns[coloumn_swap]), backup[i2])
+        backup[i1] = re.sub(first_item.group(int(coloumn_swap)), second_item.group(int(coloumn_swap)), backup[i1])
+        backup[i2] = re.sub(second_item.group(int(coloumn_swap)), first_item.group(int(coloumn_swap)), backup[i2])
         writer.writer_system(backup, 'inventory_backup.txt')
         #print(backup)
-
+    else:
+        print('No such index. Going back to main menue')
     
 
 
 
 if __name__ == '__main__':
-    generate_backup()
+    #generate_backup()
+    swap_values_backup()
