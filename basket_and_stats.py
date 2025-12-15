@@ -4,7 +4,7 @@ import reader
 import writer
 from datetime import datetime, timedelta
 import numpy as np
-import pandas as pd #Panda is good for data frames and statistics
+ #Panda is good for data frames and statistics
 
 # Set working directory to the script's directory
 abspath = os.path.abspath(__file__)
@@ -69,8 +69,7 @@ def process_sale():
         if sales_list:
             last_date_str = sales_list[-1].get('date', '')
             try:
-                last_date = datetime.strptime(last_date_str, "%Y-%m-%d") #strptime makes string into datetime object
-                date = (last_date + timedelta(days=1)).strftime("%Y-%m-%d") # timedelta adds one day
+                date = datetime.now().strftime("%Y-%m-%d")                
             except Exception:
                 date = datetime.now().strftime("%Y-%m-%d") #If error occurs we use todays date
         else:
@@ -110,11 +109,6 @@ def process_sale():
                     print(f'Remaining quantity: {new_qty}')
 
 
-                    # Build a lookup dict keyed by sale_id for quick access
-                    
-
-
-
                     # Compute sale line details (price and line total)
                     price = float(result['price'])
                     line_total = price * user_qty  # Total revenue for this line
@@ -145,58 +139,65 @@ def process_sale():
         else:
             print(f'Category {user_cat} not found')
 
+
+
 def statistics():
     sales_data = reader.reader_system('sales.json')
+
     
-    # Normalize sales data: support either {'sales': [...]} or a plain list of sale dicts
     if isinstance(sales_data, dict) and 'sales' in sales_data:
-        sales_stats = pd.json_normalize(sales_data['sales'])
+        sales_list = sales_data['sales']
     elif isinstance(sales_data, list):
-        sales_stats = pd.json_normalize(sales_data)
+        sales_list = sales_data
     else:
-        # empty or unexpected format, makes it into an empty DataFrame
-        sales_stats = pd.DataFrame()
-  
-    df = sales_stats
-    if df.empty:
         print("No sales data available to compute statistics.")
         return
 
-     # Convert columns (that hold numbers as strings) to real numeric types so you can do math on them  
-    df['quantity_sold'] = pd.to_numeric(df.get('quantity_sold', pd.Series(dtype='int')))  #numerics makes '20' into 20
-    df['line_total'] = pd.to_numeric(df.get('line_total', pd.Series(dtype='float')))
-    df['sale_id'] = pd.to_numeric(df.get('sale_id', pd.Series(dtype='int')))
+    if not sales_list:
+        print("No sales data available to compute statistics.")
+        return
+
+    # Extract columns into NumPy arrays
+    sale_id = np.array([int(s['sale_id']) for s in sales_list])
+    item_id = np.array([int(s['item_id']) for s in sales_list])
+    quantity_sold = np.array([int(s['quantity_sold']) for s in sales_list])
+    line_total = np.array([float(s['line_total']) for s in sales_list])
+
     
-    total_sales = df['line_total'].sum()
-   
-    #drop duplicates to count unique sales entries
-    unique_sales_count = df['sale_id'].nunique()
-    sales_count = df['sale_id']
+
+    total_sales = np.sum(line_total)
+
+    unique_sales_count = len(np.unique(sale_id))
+
+    average_revenue_per_sale = np.mean(line_total) if line_total.size > 0 else 0
+
+    # Group by item_id and sum quantity_sold
+    unique_items = np.unique(item_id)
+    total_quantity_per_item = {
+        item: quantity_sold[item_id == item].sum()
+        for item in unique_items
+    }
+
+    # Find item with max quantity sold
+    most_popular_product_quantity = max(
+        total_quantity_per_item,
+        key=total_quantity_per_item.get
+    )
+
     
-  # average revenue per sale entry (i.e. average of line_total per row)
-    average_revenue_per_sale = df['line_total'].mean() if not df['line_total'].empty else 0 #looks if line_total is empty
-    # mean() computes the average of the line_total column
-    
-    best_selling_by_quantity = df.groupby('item_id')['quantity_sold'].sum()
-    print('Sales Statistics:')    
+    print('Sales Statistics:')
     print('-' * 40)
     print(f'Average revenue per sale entry: {average_revenue_per_sale:.2f}')
     print('-' * 40)
-    print(f'Number of unique sales entries: {unique_sales_count}') 
-    
+    print(f'Number of unique sales entries: {unique_sales_count}')
     print('-' * 40)
     print(f'Total Revenue (sum of line_total): {total_sales:.2f}')
     print('-' * 40)
-
-    
-        # idxmax(): finds the index (item_id) of the max value in the series or the item with highest total quantity sold
-    most_popular_product_quantity = best_selling_by_quantity.idxmax()
     print('Most popular product by quantity: Item ID', most_popular_product_quantity)
+    print('-' * 40)
 
-    print('-' * 40)   
 
-        
+if __name__ == "__main__":
+    statistics()
 
-if __name__ == "__main__":        
-    #process_sale()
-    statistics() 
+
