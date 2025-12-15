@@ -1,5 +1,6 @@
 import json
 import os
+import binary_search
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath) 
 os.chdir(dname)
@@ -33,3 +34,11 @@ def reader_system(file_name):
                 return file.readlines()
     except:
         return {}
+    
+if __name__ == '__main__':
+    inventory = reader_system('inventory.json')
+    #print(inventory['inventory'])
+    index = binary_search.BS(126, inventory['inventory'])
+    if inventory['inventory'][False]:
+        print(index)
+

@@ -1,6 +1,6 @@
 import reader
 import writer
-
+import binary_search
 
 def add_item_inventory():
     #The function adds a new item to the inventory.
@@ -32,14 +32,11 @@ def delete_item_inventory():
     inventory_dict = reader.reader_system('inventory.json')
     removed = 0
     removable_input = input('Input the item id you want to remove : ')
-    #Iterates over the dictionary of lists and checks if the item exists in the inventory. Then deletes it
-    for index, (keys, category) in enumerate(inventory_dict.items()):            #Pointer pointing to the category list
-        for item in category:
-            if item['item_id'] == removable_input:
-                category.remove(item)
-                removed = 1
-    
-    if removed == 0:
+    # Searches over the dictionary of lists and checks if the item exists in the inventory. Then deletes it.
+    removable_index = binary_search.BS(int(removable_input), inventory_dict['inventory'])
+    if removable_index >= 0:
+        inventory_dict['inventory'].pop(removable_index)
+    else:
         print('Item does not exist')
 
     writer.writer_system(inventory_dict, 'inventory.json')
