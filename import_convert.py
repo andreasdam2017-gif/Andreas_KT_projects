@@ -65,7 +65,7 @@ def import_and_convert_test_data():
     with open('sales.json', mode='w') as json_dict:
         json.dump(sales_dict, json_dict)
 
-if __name__ == 'main':
+if __name__ == '__main__':
     import_and_convert_test_data()
     #We make a pretty print of the categories. Purely for aesthetics and easier to read   
     with open('inventory.json','r') as inventory:
