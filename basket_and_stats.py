@@ -6,11 +6,6 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd #Panda is good for data frames and statistics
 
-# Set working directory to the script's directory
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
-
 def process_sale():
 
     sales_data = reader.reader_system('sales.json')
@@ -105,8 +100,6 @@ def process_sale():
                     sold_qty = user_qty
                     new_qty = qty - user_qty
                     result['quantity_in_stock'] = str(new_qty)
-                    
-
                     print(f'Remaining quantity: {new_qty}')
 
 
@@ -156,7 +149,7 @@ def statistics():
     else:
         # empty or unexpected format, makes it into an empty DataFrame
         sales_stats = pd.DataFrame()
-  
+    
     df = sales_stats
     if df.empty:
         print("No sales data available to compute statistics.")
