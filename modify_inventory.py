@@ -8,22 +8,21 @@ def add_item_inventory():
 
     #Loads the inventory json file
     inventory_dict = reader.reader_system('inventory.json')
-
+    
     #Asks the user for the inputs
-    item_id = input('Input the item id : ')
+    item_id = str(int(inventory_dict["inventory"][-1]["item_id"]) + 1)
     item_name = input('Input the item name : ')
     category = input('Input the item category : ')
     price = input('Input the item price : ')
     quantity_in_stock = input('Input the quantity in stock of the item : ')
 
-    inventory_dict[category].append({'item_id' : item_id,
+    inventory_dict['inventory'].append({'item_id' : item_id,
                                         'item_name' : item_name,
                                         'category' : category,
                                         'price' : price,
                                         'quantity_in_stock' : quantity_in_stock})
     
     writer.writer_system(inventory_dict, 'inventory.json')
-    return inventory_dict
 
 def delete_item_inventory():
     #The function deletes a item from the inventory.
@@ -46,7 +45,6 @@ def delete_item_inventory():
     writer.writer_system(inventory_dict, 'inventory.json')
 
     #print(inventory_dict)
-    return inventory_dict
 
 
 def update_inventory():
@@ -78,12 +76,21 @@ def update_inventory():
                     custom_input= input('What do you want to change the value to? : ')
                     item[index_keys[int(options_input)][1]] = custom_input
 
+                    print()
+                    for i, key in index_keys:
+                        if key != 'item_id':
+                            print(f'{i} : {key:<17} : {item[key]}')
+                    print('0 : BACK\n')
                     options_input = input('Input the index you want to update : ')
+
                 #print(item)
+                writer.writer_system(inventory_dict, 'inventory.json')
                 break
     
     if item_inventory == 0:
         print('Item does not exist, consider adding it to the inventory instead.')
 
 if __name__ == '__main__':
-    update_inventory()
+    #add_item_inventory()
+    delete_item_inventory()
+    #update_inventory()
