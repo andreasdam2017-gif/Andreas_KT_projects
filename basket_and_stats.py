@@ -11,126 +11,165 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
+
+
 def process_sale():
 
     sales_data = reader.reader_system('sales.json')
-    inventory_categories = reader.reader_system('inventory.json')
-
-
+    inventory_data = reader.reader_system('inventory.json')
 
     # Determine the next sale_id by examining existing sales
     # Normalize sales_data: support either a dict  or a plain list
-    if isinstance(sales_data, dict): #isinstance checks if its a dict or something else and returns boolean true or false
+    if isinstance(sales_data, dict):#isinstance checks if its a dict or something else and returns boolean true or false
         sales_list = sales_data.get('sales', [])
     else:
         sales_list = sales_data
-     
-    if sales_data == {} or inventory_categories == {}:
-        print('Empty Sales or Inventory Dictionary, cannot continue.')
+
+    
+    if isinstance(inventory_data, dict):
+        inventory = inventory_data.get("inventory", [])
+    else:
+        inventory = inventory_data
+
+    if not sales_list or not inventory:
+        print('Empty Sales or Inventory data, cannot continue.')
         return
 
-    # We'll compute next_key when a sale starts (so each sale gets a fresh id or continue having the old one)
+    # Group inventory by category so it becomes a nesteed dict
+    grouped = {}
 
-    # Outer loop: allow starting multiple sales until the user exits
+    for item in inventory:
+        if "category" not in item:
+            continue
+
+        category = item["category"]
+
+        if category not in grouped:
+            grouped[category] = []
+
+        grouped[category].append(item)
+
+    categories = sorted(grouped.keys())
+
+
+
+    
+    # Purchase loop
+    
     new_customer = 0
+
     while True:
         try:
-            ask = int(input('Would you like to purchase something? Press 1 to buy and anything else to cancel: '))
-                    
-        except ValueError:#Incase user writes a non interger
-            print('Invalid input — cancelling.')            
+            ask = int(input(
+                'Would you like to purchase something? Press 1 to buy and anything else to cancel: '
+            ))
+        except ValueError:
+            print('Invalid input — cancelling.')
             break
 
         if ask != 1:
-            print('Purchase cancelled.')            
+            print('Purchase cancelled.')
             break
+
+       
+        verify = 1
         if new_customer == 1:
-            verify = int(input('Are you a new customer or do you wish to buy more as the same customer? Press 1 if new or Press 2 to continue shopping:  '))
-        
-        # Initialize next_key based on customer type
-        next_key = None
+            verify = int(input('Press 1 for new customer or 2 to continue shopping: ' ))
+
+        # Determine sale_id
         if new_customer == 0 or verify == 1:
-            # Compute next sale_id for this new sale (fresh id per sale)
-            max_id_str = max(sales_list, key=lambda s: int(s['sale_id']))['sale_id'] #using lamba function to get the max sale_id instead of a loop
+            max_id_str = max(sales_list, key=lambda s: int(s['sale_id']))['sale_id']
             next_key = str(int(max_id_str) + 1)
         elif verify == 2:
-            # Keeps same sale_id but allows you to buy more
             max_id_str = max(sales_list, key=lambda s: int(s['sale_id']))['sale_id']
             next_key = str(int(max_id_str))
         else:
-            print('Invalid choice. Please enter 1 or 2.')
+            print('Invalid choice.')
             continue
-                
-        # use today's date. Expected stored date format is YYYY-MM-DD.
-        if sales_list:            
-            date = datetime.now().strftime("%Y-%m-%d")                
 
- 
+        date = datetime.now().strftime("%Y-%m-%d")
+
+        # Show categories
+        print("\nAvailable categories:\n")
+        for i, category in enumerate(categories, 1):
+            print(f"{i}. {category}")
+
+        choice = input('\nChoose a category number: ')
+
+        if not choice.isdigit():
+            print('Invalid input.')
+            continue
+
+        index = int(choice) - 1
+
+        if index < 0 or index >= len(categories):
+            print('Choice out of range.')
+            continue
+
+        selected = categories[index]
+        print(f"\nItems in {selected}:\n")
+        for item in grouped[selected]:
+            print(
+            f"ID: {item.get('item_id')} - "
+            f"{item.get('item_name', 'No name')} | "
+            f"Available: {item.get('quantity_in_stock')}"
+    )
+
+
         
-        # Show available categories
-        for category in inventory_categories.keys():
-            print(f"  {category}")
-        user_cat = input('What Category? (type Dairy to get Dairy products): ').strip()
+        user_item_id = input('\nEnter item ID: ').strip()
+        for item in grouped[selected]:
+            if item.get("item_id") == user_item_id:
+                result = item
+                break #breaks once the item is found to stop loop
 
-        if user_cat in inventory_categories:
-            items = inventory_categories[user_cat]
-            print(f'\nItems in {user_cat}:')
-            for item in items:
-                print(f'  ID: {item["item_id"]} - Name: {item["item_name"]} - Qty: {item["quantity_in_stock"]}')
 
-            user_item_id = input('What Item ID do you want?:  ').strip()
-            # Create mapping item_id
-            item_dict = {item['item_id']: item for item in items}
-            result = item_dict.get(user_item_id)
+        if not result:
+            print('No item found with that ID.')
+            continue
 
-            if result:
-                print(f'You selected: {result}')
+        qty = int(result['quantity_in_stock'])
 
-                qty = int(result['quantity_in_stock'])
-                try:
-                    user_qty = int(input('How much do you want?:  '))
-                except ValueError:
-                    print('Invalid input, try again')
-                    continue
+        try:
+            user_qty = int(input('How much do you want?: '))
+        except ValueError:
+            print('Invalid input.')
+            continue
 
-                if user_qty <= 0 or user_qty != int(user_qty): #Makes sure user cant buy negative or non interger amounts
-                    print('Invalid quantity requested.')
-                    continue
-                
-                if user_qty <= qty:  # Check stock before allowing the sale
-                    sold_qty = user_qty
-                    new_qty = qty - user_qty
-                    result['quantity_in_stock'] = str(new_qty)
-                    print(f'Remaining quantity: {new_qty}')
-                    # Compute sale line details (price and line total)
-                    price = float(result['price'])
-                    line_total = price * user_qty  # Total revenue for this line
-                    new_sale = {
-                        'sale_id': next_key,
-                        'date': date,
-                        'item_id': result['item_id'],
-                        'quantity_sold': sold_qty,
-                        'line_total': str(line_total)
-                    }
+        if user_qty <= 0:
+            print('Invalid quantity requested.')
+            continue
 
-                    # Append the sale line to sales_list and update lookup
-                    sales_list.append(new_sale)                 
+        if user_qty > qty:
+            print(f'Not enough stock. Available: {qty}')
+            continue
 
-                    writer.writer_system(sales_list, 'sales.json')
+        # Update inventory
+        sold_qty = user_qty
+        result['quantity_in_stock'] = str(qty - user_qty)
 
-                    print('Added sale:', new_sale)
-                    # show total number of sale lines 
-                    print('Total number of sale lines now:', len(sales_list))
-                    new_customer = 1
+        price = float(result['price'])
+        line_total = price * user_qty
 
-                    writer.writer_system(inventory_categories, 'inventory.json')  # updates inventory after sale been concluded
-                else:
-                    print(f'Not enough stock. Available: {qty}, Requested: {user_qty}')
-            else:
-                print(f'No item found with ID {user_item_id}')
-        else:
-            print(f'Category {user_cat} not found')
+        new_sale = {
+            'sale_id': next_key,
+            'date': date,
+            'item_id': result['item_id'],
+            'quantity_sold': sold_qty,
+            'line_total': str(line_total)
+        }
 
+        sales_list.append(new_sale)
+
+        writer.writer_system(sales_list, 'sales.json')
+
+        
+        writer.writer_system(inventory, 'inventory.json')
+
+        print('Added sale:', new_sale)
+        print('Total sale lines:', len(sales_list))
+
+        new_customer = 1
 
 
 def statistics():
