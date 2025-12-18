@@ -3,9 +3,11 @@
 
 
 def BS(search_id, list_dict):
+    """
     # Binary search algorithm
     # Arguments are the id you search for and a list of dicts with the key "item_id" in it
     # Returns the index for the value you are searching for or -1 if it does not exist
+    """
     try:
         left = 0
         right = len(list_dict) - 1

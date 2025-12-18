@@ -1,15 +1,15 @@
-import reader
-import writer
+import reader_writer
 import re
 
 def generate_backup():
+    """
     # The function sorts all the items in the inventory and 
     # writes it to a backup.txt file (Don't add any ":" in the fields)
     # Arguments : none
     # Returns : none
-    
+    """
     # Puts all items into one list and sorts it with regard to item_id
-    inventory_dict = reader.reader_system('inventory.json')
+    inventory_dict = reader_writer.reader_system('inventory.json')
     backup_li = []
     for keys, category in inventory_dict.items():               # Pointer pointing to the category list
         backup_li += category
@@ -20,7 +20,7 @@ def generate_backup():
     
     # Prints the header to the bakup file
     for key in backup_keys:
-        backup_file.writelines(f': {key:<{len(key)+10}}')
+        backup_file.writelines(f' : {key:<{len(key)+10}}')
     backup_file.writelines(f'\n')
     for key in backup_keys:
         backup_file.writelines(f'{"-"*(len(key)+10)}')
@@ -36,18 +36,17 @@ def generate_backup():
 
 def swap_values_backup():
     """
-    The function reads the backup file and request 3 inputs from the user.
-    The first two inputs are the item ids you want to switch.
-    The third input is the coloumn you want to switch as designated in the header.
-    It then swaps those two values.
-    There are no arguments and the function returns nothing.
+    # The function reads the backup file and request 3 inputs from the user.
+    # The first two inputs are the item ids you want to switch.
+    # The third input is the coloumn you want to switch as designated in the header.
+    # It then swaps those two values.
+    # There are no arguments and the function returns nothing.
     """
-
-
+    
     # Inputs and initialization of variables
     item1 = input('Input the first item Id you want to swap : ')
     item2 = input('Input the second item Id you want to swap : ')
-    backup = reader.reader_system('inventory_backup.txt')
+    backup = reader_writer.reader_system('inventory_backup.txt')
     pattern1 = re.compile(r'^ : ' + re.escape(item1))
     pattern2 = re.compile(r'^ : ' + re.escape(item2))
     i = 0
@@ -81,13 +80,13 @@ def swap_values_backup():
     coloumn_swap = input('Which coloumn index do you want to swap? : ')
     pattern = re.compile(r'^ : \d+\s*: (.+?(?=:)): ([A-Z]*[a-z]+)\s*: (\d+\.\d*)\s*: (\d+)')
 
-    # Finds the coloumn values  and splits them into 5 groups then swaps the specified values.
+    # Finds the coloumn values  and splits them into 4 groups then swaps the specified values.
     if coloumns.get(coloumn_swap):
         first_item = re.search(pattern, backup[i1])
         second_item = re.search(pattern, backup[i2])
         backup[i1] = re.sub(first_item.group(int(coloumn_swap)), second_item.group(int(coloumn_swap)), backup[i1])
         backup[i2] = re.sub(second_item.group(int(coloumn_swap)), first_item.group(int(coloumn_swap)), backup[i2])
-        writer.writer_system(backup, 'inventory_backup.txt')
+        reader_writer.writer_system(backup, 'inventory_backup.txt')
         #print(backup)
     else:
         print('No such index. Going back to main menue')

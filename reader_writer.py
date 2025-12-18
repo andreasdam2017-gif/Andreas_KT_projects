@@ -1,15 +1,14 @@
 import json
 import os
 import binary_search
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath) 
-os.chdir(dname)
 
 
 def reader_userinput(directory):
+    """
     # The function lists json files in the working directory and loads the chosen file.
     # Arguments : directory = working directory
     # Returns : The chosen json file 
+    """
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.endswith('.json'):
@@ -24,6 +23,11 @@ def reader_userinput(directory):
 
 
 def reader_system(file_name):
+    """
+    # Function that reads a .json or .txt file
+    # Argument : the file name in string format
+    # returns the saved object in the file or an empty dict if it does not exist
+    """
     try:
         if file_name.endswith('.json'):
             with open(file_name, 'r') as file:
@@ -34,7 +38,23 @@ def reader_system(file_name):
                 return file.readlines()
     except:
         return {}
-    
+
+
+def writer_system(dict_of_lists, file_name):
+    """
+    # The function writes an object to a file
+    # Arguments : object to be written to a json or txt file, the name of the file
+    # Returns : nothing
+    """
+    if file_name.endswith('.json'):
+        with open(file_name, 'w') as file:
+            json.dump(dict_of_lists, file)
+    elif file_name.endswith('.txt'):
+        with open(file_name, 'w') as file:
+            for item in dict_of_lists:
+                file.writelines(f'{item}')
+                
+
 if __name__ == '__main__':
     inventory = reader_system('inventory.json')
     #print(inventory['inventory'])
