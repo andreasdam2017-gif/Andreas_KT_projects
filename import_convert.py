@@ -1,22 +1,19 @@
 import csv
 import json
-import os 
 
-#We make the working directory into the file directory
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath) 
-os.chdir(dname)
 
 def import_and_convert_test_data():
-    #We open the two.cvs in a try and execpt, where if error we get a empty json file.
+    """
+    #We open the two.csv in a try and execpt, where if error we get a empty json file.
+    """
     try:
-        with open('inventory.csv', newline='') as inventory: #newline if empty
+        with open('inventory.csv', newline='') as inventory: # newline if empty
             reader = csv.reader(inventory)
             list_dict = list(reader)
     except:
         list_dict = []
     try:   
-        with open('sales.csv', newline='') as sales: #newline if empty
+        with open('sales.csv', newline='') as sales: # newline if empty
             reader = csv.reader(sales)
             list_dict2 = list(reader)
     except:
@@ -24,8 +21,9 @@ def import_and_convert_test_data():
     sales_list = []   
     inventory_dict = {}   
     inventory_list = []
-    #We use a for loop that creates a list of empty dictionaries, adds the key value pairs to the empty dictionaries 
-    for i in range(len(list_dict)-1):#-1 to remove the header in the cvs file
+
+    # We use a for loop that creates a list of empty dictionaries, adds the key value pairs to the empty dictionaries 
+    for i in range(len(list_dict)-1):# -1 to remove the header in the cvs file
         inventory_list.append(dict())
         inventory_list[i].update({'item_id' : list_dict[i+1][0],
                                 'item_name' : list_dict[i+1][1],
@@ -40,7 +38,6 @@ def import_and_convert_test_data():
                             'quantity_sold' : list_dict2[i+1][3],
                             'line_total' : list_dict2[i+1][4]})
     sales_dict = {'sales' : sales_list}
-    print(sales_dict)
 
 
 
@@ -48,8 +45,8 @@ def import_and_convert_test_data():
     inventory_list = sorted(inventory_list, key=lambda x: x['item_id'])
     inventory_dict.update({'inventory' : inventory_list})
 
-    #We open both json files and dump the dictionary of the inventory from above into the json file.
-    #And also dump the sales dictionary 
+    # We open both json files and dump the dictionary of the inventory from above into the json file.
+    # And also dump the sales dictionary 
     with open('inventory.json', mode='w') as json_dict:
         json.dump(inventory_dict, json_dict)
 
@@ -60,7 +57,7 @@ def import_and_convert_test_data():
 
 if __name__ == '__main__':
     import_and_convert_test_data()
-    #We make a pretty print of the categories. Purely for aesthetics and easier to read   
+    # We make a pretty print of the categories. Purely for aesthetics and easier to read   
     with open('inventory.json','r') as inventory:
         parsed = json.load(inventory)
         print(json.dumps(parsed, indent = 4))
