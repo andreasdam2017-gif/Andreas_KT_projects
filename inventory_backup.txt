@@ -23,3 +23,4 @@
  : 123               : Butter 250g         : Dairy              : 2.60            : 14                         
  : 124               : Shampoo 500ml       : Hygiene            : 4.20            : 11                         
  : 126               : 102                 : Dairymary          : 100             : 5                          
+ : 127               : test                : test               : 20.5            : 50                         
