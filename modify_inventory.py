@@ -20,8 +20,27 @@ def add_item_inventory():
             item_id = 101
         item_name = input('Input the item name : ')
         category = input('Input the item category : ')
-        price = input('Input the item price : ')
-        quantity_in_stock = input('Input the quantity in stock of the item : ')
+
+        # makes sure we only get a number or a number with seperated by "." 
+        while True:
+            price = input('Input the item price : ')
+            split = price.split('.')
+            valid = True
+            for item in split:
+                valid = item.isdigit()
+                if valid == False:
+                    break
+            if valid == False:
+                print('Expected a digit')
+                continue
+            break
+
+        while True:
+            quantity_in_stock = input('Input the quantity in stock of the item : ')
+            if quantity_in_stock.isdigit() == False:
+                print('Expected a digit')
+                continue
+            break
 
         inventory_dict['inventory'].append({'item_id' : item_id,
                                             'item_name' : item_name,
