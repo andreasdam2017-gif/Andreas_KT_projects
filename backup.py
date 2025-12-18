@@ -78,7 +78,7 @@ def swap_values_backup():
     for i in range(1, len(coloumns)+1):
         print(f'{i} : {coloumns[str(i)]}')
     coloumn_swap = input('Which coloumn index do you want to swap? : ')
-    pattern = re.compile(r'^ : \d+\s*: (.+?(?=:)): ([A-Z]*[a-z]+)\s*: (\d+\.\d*)\s*: (\d+)')
+    pattern = re.compile(r'^ : \d+\s*: (.+?(?=:)): ([A-Z]*[a-z]+)\s*: (\d+\.*\d*)\s*: (\d+)')
 
     # Finds the coloumn values  and splits them into 4 groups then swaps the specified values.
     if coloumns.get(coloumn_swap):
