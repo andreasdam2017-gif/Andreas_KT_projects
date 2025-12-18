@@ -1,5 +1,4 @@
 import os
-import reader_writer
 from Show_sales_inventory import display
 import modify_inventory
 import backup

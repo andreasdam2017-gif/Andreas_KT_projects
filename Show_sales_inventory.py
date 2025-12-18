@@ -1,7 +1,7 @@
 import json
 import csv
 import os
-import reader
+import reader_writer
 
 #We make the working directory into the file directory
 abspath = os.path.abspath(__file__)
@@ -20,7 +20,7 @@ def display():
     print('You can only display "sales.json" and "inventory.json"')
     display_file = input('Which file do you want to display : ')
     if display_file == 'sales.json' or display_file == 'inventory.json':
-        display_items = reader.reader_system(display_file)
+        display_items = reader_writer.reader_system(display_file)
         for cate_name, items in display_items.items():#We take the outer dict and display its name in a for loop
             print()
             print('-' * 40)

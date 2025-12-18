@@ -1,7 +1,6 @@
 import json
 import os
-import reader
-import writer
+import reader_writer
 from datetime import datetime, timedelta
 import numpy as np
 import binary_search
@@ -20,8 +19,8 @@ def process_sale():
     it loops until user leaves at the beginning of each sale.
     """
 
-    sales_data = reader.reader_system('sales.json')
-    inventory_data = reader.reader_system('inventory.json')
+    sales_data = reader_writer.reader_system('sales.json')
+    inventory_data = reader_writer.reader_system('inventory.json')
     
     # Determine the next sale_id by examining existing sales
     # Normalize sales_data: support either a dict  or a plain list
@@ -182,10 +181,10 @@ def process_sale():
         
         
 
-        writer.writer_system(sales_data, 'sales.json')
+        reader_writer.writer_system(sales_data, 'sales.json')
 
         
-        writer.writer_system(inventory_data, 'inventory.json')
+        reader_writer.writer_system(inventory_data, 'inventory.json')
 
         print('Added sale:', new_sale)
         print('Total sale lines:', len(sales_list))
@@ -199,7 +198,7 @@ def statistics():
     This function checks if there exist statistics to show, then sorts the sales data into numpy arrays and calcluates it 
     and prints the appropriate stats.
     """
-    sales_data = reader.reader_system('sales.json')
+    sales_data = reader_writer.reader_system('sales.json')
 
     
     if isinstance(sales_data, dict) and 'sales' in sales_data:
