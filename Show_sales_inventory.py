@@ -12,6 +12,9 @@ os.chdir(dname)
 #print it out in a readable way
 
 def display():
+    """
+    This Function shows files in inventory or in Sales
+    """
     #This functions accepts dictionaries and displays the content of said dictionary in a readable way. It does not return any
     #Value, but just displays the content.
     print('You can only display "sales.json" and "inventory.json"')
@@ -28,6 +31,9 @@ def display():
                     print(f'    {key} = {value}')
     else:
             print('Error, you typed the wrong file name')
+    
+    input('Going back to main menu, press anything to confirm')
+    
                        
 if __name__ == "__main__":  
     display()#Change name if you wish to see inventory.json or sales.json file
