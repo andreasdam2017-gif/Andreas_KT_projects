@@ -1,11 +1,10 @@
  : item_id           : item_name           : category           : price           : quantity_in_stock          
 ------------------------------------------------------------------------------------------------
- : 101               : Milk 1L             : Dairy              : 1.25            : 18                         
  : 102               : Bread Loaf          : Bakery             : 2.50            : 12                         
  : 103               : Eggs 12-pack        : Dairy              : 3.10            : 30                         
  : 104               : Apples 1kg          : Fruit              : 2.80            : 25                         
  : 105               : Bananas 1kg         : Fruit              : 2.20            : 20                         
- : 106               : Orange Juice 1L     : Beverages          : 3.40            : 15                         
+ : 106               : Orange Juice 1L     : Beverages          : 3.40            : 1                          
  : 107               : Coffee Beans 500g   : Beverages          : 6.90            : 10                         
  : 108               : Tomatoes 1kg        : Vegetables         : 2.60            : 22                         
  : 109               : Potatoes 2kg        : Vegetables         : 3.20            : 28                         
@@ -24,4 +23,5 @@
  : 122               : Flour 1kg           : Pantry             : 1.10            : 18                         
  : 123               : Butter 250g         : Dairy              : 2.60            : 14                         
  : 124               : Shampoo 500ml       : Hygiene            : 4.20            : 11                         
- : 125               : Hand Soap 300ml     : Hygiene            : 2.10            : 17                         
+ : 126               : 102                 : Dairymary          : 100             : 5                          
+ : 127               : test                : test               : 20.5            : 50                         
