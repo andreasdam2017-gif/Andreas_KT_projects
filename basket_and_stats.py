@@ -215,7 +215,11 @@ def statistics():
 
     unique_sales_count = len(np.unique(sale_id))
 
-    average_revenue_per_sale = np.mean(line_total) if line_total.size > 0 else 0
+    average_revenue_per_sale = (
+    total_sales / unique_sales_count
+    if unique_sales_count > 0 else 0
+)
+
 
     # Group by item_id and sum quantity_sold
     unique_items = np.unique(item_id)
