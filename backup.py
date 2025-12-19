@@ -11,8 +11,8 @@ def generate_backup():
     # Puts all items into one list and sorts it with regard to item_id
     inventory_dict = reader_writer.reader_system('inventory.json')
     backup_li = []
-    for keys, category in inventory_dict.items():               # Pointer pointing to the category list
-        backup_li += category
+    for keys, inventory_list in inventory_dict.items():               # Pointer pointing to the category list
+        backup_li += inventory_list
     
     # Opens the backup file and assigns the keys to a variable
     backup_file = open('inventory_backup.txt', 'w')

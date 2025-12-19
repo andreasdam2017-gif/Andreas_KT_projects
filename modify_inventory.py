@@ -34,7 +34,8 @@ def add_item_inventory():
                 print('Expected a digit')
                 continue
             break
-
+            
+        # Makes sure that the quantity is a digit before continuing
         while True:
             quantity_in_stock = input('Input the quantity in stock of the item : ')
             if quantity_in_stock.isdigit() == False:
@@ -46,7 +47,8 @@ def add_item_inventory():
                                             'item_name' : item_name,
                                             'category' : category,
                                             'price' : price,
-                                            'quantity_in_stock' : quantity_in_stock})
+                                            'quantity_in_stock' : quantity_in_stock
+                                            })
 
         exit = input('Do you want to continue inputing new items? [y / n] : ')
         if exit == 'n' or exit == 'N':
@@ -87,9 +89,9 @@ def delete_item_inventory():
         exit = input('Do you want to continue deleting items? [y / n] : ')
         if exit == 'n' or exit == 'N':
             break
+
     reader_writer.writer_system(inventory_dict, 'inventory.json')
 
-    #print(inventory_dict)
 
 
 def update_inventory():
@@ -110,13 +112,16 @@ def update_inventory():
     item_inventory = 0
 
     # Searching for the item id
-    for index, (keys, category) in enumerate(inventory_dict.items()):               # Pointer pointing to the category list
-        item_index = binary_search.BS(update_input, category)
+    for index, (keys, inventory_list) in enumerate(inventory_dict.items()):               # Pointer pointing to the category list
+        item_index = binary_search.BS(update_input, inventory_list)
         if item_index >= 0:
-            item = category[item_index]
+            item = inventory_list[item_index]
+        else:
+            break
         if item['item_id'] == str(update_input):                                     # If the item exists then we update it
             index_keys = list(enumerate(item.keys()))
             item_inventory = 1
+
             # Prints the options menue for the item to be updated
             for i, key in index_keys:
                 if key != 'item_id':
