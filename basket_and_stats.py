@@ -5,10 +5,6 @@ from datetime import datetime, timedelta
 import numpy as np
 import binary_search
 
-# Set working directory to the script's directory
-abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
 
 
 
@@ -17,26 +13,27 @@ def process_sale():
     Processes the sale of a customer, correctly gives a customer a sale_id and removes stocks in inventory.json
     and updates sales_json with a new sale_ID and sales, it then updates the inventory with new stocks.
     it loops until user leaves at the beginning of each sale.
+    This function doesnt return any values, just records new sale and updates the inventory.
     """
 
-    sales_data = reader_writer.reader_system('sales.json')
-    inventory_data = reader_writer.reader_system('inventory.json')
+    sales_dict = reader_writer.reader_system('sales.json')
+    inventory_dict = reader_writer.reader_system('inventory.json')
     
     # Determine the next sale_id by examining existing sales
-    # Normalize sales_data: support either a dict  or a plain list
-    if isinstance(sales_data, dict):#isinstance checks if its a dict or something else and returns boolean true or false
-        sales_list = sales_data.get('sales', [])
+    # Normalize sales_dict: support either a dict  or a plain list
+    if isinstance(sales_dict, dict):
+        sales_list = sales_dict.get('sales', [])
     else:
-        sales_list = sales_data
-
+        sales_list = sales_dict
     
-    if isinstance(inventory_data, dict):
-        inventory = inventory_data.get('inventory', [])
+    if isinstance(inventory_dict, dict):
+        inventory = inventory_dict.get('inventory', [])
     else:
-        inventory = inventory_data
+        inventory = inventory_dict
 
     if not sales_list or not inventory:
         print('Empty Sales or Inventory data, cannot continue.')
+        input('Going back to main menu, press enter to confirm')
         return
 
     inventory_storage = inventory
@@ -54,13 +51,10 @@ def process_sale():
 
         grouped[category].append(item)
 
-    categories = sorted(grouped.keys())
-    
-    # Purchase loop
-    
+    categories = sorted(grouped.keys())     
 
     new_customer = 0
-   
+   # Purchase loop 
     while True:
         #intialising variables
         index = 0
@@ -126,8 +120,6 @@ def process_sale():
             f"{item.get('item_name', 'No name')} | "
             f"Available: {item.get('quantity_in_stock')}"
     )
-
-
         
         user_item_id = input('\nEnter item ID: ').strip()
         try:
@@ -177,14 +169,10 @@ def process_sale():
             'line_total': f'{line_total:.2f}'
         }
                 
-        sales_list.append(new_sale)
-        
-        
+        sales_list.append(new_sale) 
 
-        reader_writer.writer_system(sales_data, 'sales.json')
-
-        
-        reader_writer.writer_system(inventory_data, 'inventory.json')
+        reader_writer.writer_system(sales_dict, 'sales.json')        
+        reader_writer.writer_system(inventory_dict, 'inventory.json')
 
         print('Added sale:', new_sale)
         print('Total sale lines:', len(sales_list))
@@ -196,30 +184,32 @@ def process_sale():
 def statistics():
     """
     This function checks if there exist statistics to show, then sorts the sales data into numpy arrays and calcluates it 
-    and prints the appropriate stats.
+    and prints the appropriate stats. 
+    
+    The Function doesnt return any values.
     """
-    sales_data = reader_writer.reader_system('sales.json')
+    sales_dict = reader_writer.reader_system('sales.json')
 
     
-    if isinstance(sales_data, dict) and 'sales' in sales_data:
-        sales_list = sales_data['sales']
-    elif isinstance(sales_data, list):
-        sales_list = sales_data
+    if isinstance(sales_dict, dict) and 'sales' in sales_dict:
+        sales_list = sales_dict['sales']
+    elif isinstance(sales_dict, list):
+        sales_list = sales_dict
     else:
-        print('No sales data available to compute statistics.')
+        print('No sales data available to compute! statistics!.')
+        input('Going back to main menu, press enter to confirm')
         return
 
     if not sales_list:
         print('No sales data available to compute statistics.')
+        input('Going back to main menu, press enter to confirm')
         return
 
     # Extract columns into NumPy arrays
     sale_id = np.array([int(s['sale_id']) for s in sales_list])
     item_id = np.array([int(s['item_id']) for s in sales_list])
     quantity_sold = np.array([int(s['quantity_sold']) for s in sales_list])
-    line_total = np.array([float(s['line_total']) for s in sales_list])
-
-    
+    line_total = np.array([float(s['line_total']) for s in sales_list])   
 
     total_sales = np.sum(line_total)
 
@@ -239,7 +229,6 @@ def statistics():
         total_quantity_per_item,
         key=total_quantity_per_item.get
     )
-
     
     print('Sales Statistics:')
     print('-' * 40)
@@ -251,9 +240,9 @@ def statistics():
     print('-' * 40)
     print('Most popular product by quantity: Item ID', most_popular_product_quantity)
     print('-' * 40)
-    input('Going back to main menu, press anything to confirm')
+    input('Going back to main menu, press enter to confirm')
 
 
 if __name__ == "__main__":
-    #statistics()
+    statistics()
     process_sale()
