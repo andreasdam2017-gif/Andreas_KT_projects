@@ -6,7 +6,7 @@ import argparse
 import logging
 import queue
 import sys
-
+#Cflib is the crazyfile simulation software, that this python file connects through with an IP
 import cflib.crtp
 from cflib.crazyflie import Crazyflie
 from cflib.crazyflie.log import LogConfig
