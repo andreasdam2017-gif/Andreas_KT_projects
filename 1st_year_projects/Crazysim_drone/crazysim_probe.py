@@ -1,6 +1,6 @@
 
 # basic log data to understand the syntax, GUI communication, and data retrieval.
-# Its main purpose was to teach me the basic syntax and process to connect to a Crazyflie drone
+# Its main purpose was to learn the basic process to connect to a Crazyflie drone and retrieve data from it.
 
 import argparse
 import logging
