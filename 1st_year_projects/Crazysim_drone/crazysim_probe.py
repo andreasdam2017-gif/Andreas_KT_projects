@@ -1,4 +1,4 @@
-# AI-assisted learning script connects to CrazySim/Crazyflie and retrieves
+
 # basic log data to understand the syntax, GUI communication, and data retrieval.
 # Its main purpose was to teach me the basic syntax and process to connect to a Crazyflie drone
 
